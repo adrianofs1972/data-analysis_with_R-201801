@@ -31,7 +31,7 @@ length(acessos_alunos)
 ## Dica 2: Vimos exemplos disto nos materiais dos tipos numéricos e das estruturas de dados.
 ### # ###
 
-paste('O aluno',acessos_aluno_dia$aluno[13])
+paste('O aluno',acessos_aluno_dia$aluno[13]) 
 
 ### 4 ###
 ## A operação abaixo cria um vetor com todas as quantidades de acessos por aluno.
