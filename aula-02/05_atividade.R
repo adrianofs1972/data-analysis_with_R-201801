@@ -11,7 +11,7 @@ load("aula-02/data/dados_exercicio.RData")
 ## Dica 2: Na primeira aula vimos uma função do RStudio que permite visualizar o conteúdo de uma variável, mas neste caso 
 ##         quero ver uma saída na Console.
 ### # ####
-
+paste('1) Lista de Alunos' )
 str(acessos_alunos)
 
 ### 2 ###
@@ -20,7 +20,8 @@ str(acessos_alunos)
 ## Dica: Vimos um exemplo no mesmo material sobre estruturas de dados
 ### # ###
 
-length(acessos_alunos)
+qtde <- length(acessos_alunos)
+paste('2) Tamanho', qtde )
 
 ### 3 ###
 ## Utilizando o seu código de aluno da Uniritter como nome de um valor da lista, imprima uma linha informando quantos acessos
@@ -31,7 +32,11 @@ length(acessos_alunos)
 ## Dica 2: Vimos exemplos disto nos materiais dos tipos numéricos e das estruturas de dados.
 ### # ###
 
-paste('O aluno',acessos_aluno_dia$aluno[13]) 
+attach(acessos_aluno_dia)
+aluno <- acessos_aluno_dia[ which(aluno=='alu201030071'),]
+detach(acessos_aluno_dia)
+
+paste('3) O aluno',aluno$aluno[1],'realizou', aluno$acessos[1] ,'acessos') 
 
 ### 4 ###
 ## A operação abaixo cria um vetor com todas as quantidades de acessos por aluno.
@@ -44,13 +49,15 @@ acessos <- unlist(acessos_alunos)
 ## 3. Determine o tamanho do vetor da operação 2, imprimindo o resultado na Console
 ### # ###
 
-
+qtde_acesso_aluno <- aluno$acessos[1]
+alunos_mais_acesso <- length(acessos_alunos[acessos>aluno$acessos[1]])
+paste('4) Há',alunos_mais_acesso,'alunos com mais acesso que',aluno$aluno[1]) 
 
 ### 5 ###
 ## Combine todas as etapas acima em uma única chamada, sem a criação dos vetores auxiliares
 ### # ###
 
-
+paste('5) [CONCATENADO]Há',length(acessos_alunos[acessos>aluno$acessos[1]]),'alunos com mais acesso que',aluno$aluno[1]) 
 
 ### 6 ###
 ## Agora determine quantos colegas fizeram menos acessos que você. 
@@ -58,7 +65,9 @@ acessos <- unlist(acessos_alunos)
 
 ## Dica: Lembre que falamos sobre como o R faz conversões implícitas entre o tipo lógico e tipos numéricos
 ### # ###
-
+ar_qtde_acesso = unlist(acessos_aluno_dia$acessos)
+alunos_menos_acesso <- sum(ar_qtde_acesso<qtde_acesso_aluno)
+paste('6]Há',alunos_menos_acesso,'alunos com menos acesso que',aluno$aluno[1]) 
 
 
 ### 7 ###
@@ -71,13 +80,14 @@ acessos <- unlist(acessos_alunos)
 ## Dica: Pode ser mais fácil se iniciar o vetor notas como uma cópia do vetor acessos, modificando os valores conforme as regras
 ## OBSERVAÇÃO :: Não avaliarei participação na forma do enunciado deste exercício. 
 ### # ###
+notas <- acessos
 
 
 
 ### 8 ###
 ## Visualização da quantidade de alunos com cada nota de participação. Esta não é uma atividade, apenas uma ilustração de como
 ## criar uma tabela com esta contagem
-table(notas)
+table(acessos_aluno_dia)
 
 
 
@@ -106,3 +116,4 @@ acessos_alunos_e_guest$guest <- NA
 # 4. Execute o comando abaixo para ler a documentação da função sum e veja se há como modificar a chamada da função sum na presença
 #    de NAs. Teste os exemplos da página de help da função sum.
 help(sum)
+
