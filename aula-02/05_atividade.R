@@ -80,14 +80,35 @@ paste('6]Há',alunos_menos_acesso,'alunos com menos acesso que',aluno$aluno[1])
 ## Dica: Pode ser mais fácil se iniciar o vetor notas como uma cópia do vetor acessos, modificando os valores conforme as regras
 ## OBSERVAÇÃO :: Não avaliarei participação na forma do enunciado deste exercício. 
 ### # ###
-notas <- acessos
+new.function <- function(data)
+{
+  tam <- length(data)
+  
+  new_data <- data
+  
+  for(i in 1:tam)
+  {
+    ent <- data[i]
+    if( ent == 0 )
+      new_data[i] = ''
+    else if ( ent < 10 )
+      new_data[i] = 1
+    else if ( ent >= 10 )
+      new_data[i] = 2
+  }
+  
+  return(new_data)
+  
+}
 
-
+paste('7] Notas')
+notas <- new.function(acessos_aluno_dia$acessos)
+str(notas)
 
 ### 8 ###
 ## Visualização da quantidade de alunos com cada nota de participação. Esta não é uma atividade, apenas uma ilustração de como
 ## criar uma tabela com esta contagem
-table(acessos_aluno_dia)
+
 
 
 
