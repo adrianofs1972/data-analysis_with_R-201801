@@ -13,7 +13,10 @@ salarios <- read_csv("aula-03/data/201802_dados_salarios_servidores.csv.gz")
 ## Após criar esta coluna, descarte todos os registros cuja Remuneração Final for menor que R$ 900,00
 ## 
 ### # ####
+salarios <- salarios %>% mutate(TOTAL_SALARIO = REMUNERACAO_REAIS + ( REMUNERACAO_DOLARES * 3.2421))
+salarios_ex01 <- salarios %>% filter(TOTAL_SALARIO >= 900)
 
+print(salarios_ex01)
 
 ### 2 ####
 ## 
@@ -22,7 +25,19 @@ salarios <- read_csv("aula-03/data/201802_dados_salarios_servidores.csv.gz")
 ## Além de listar os 5 cargos e as quantidades, crie um vetor com os nomes destes 5 cargos. Crie este vetor com o nome de cargos_diferente_lotacao.
 ## 
 ## Dica: a função pull() do dplyr extrai uma variável em formato de vetor.
-salarios %>% count(UF_EXERCICIO) %>% pull(UF_EXERCICIO) -> ufs # EXEMPLO
+#salarios %>% count(UF_EXERCICIO) %>% pull(UF_EXERCICIO) -> ufs # EXEMPLO
+
+salarios_ex02 <- salarios %>% 
+    filter( ORGSUP_LOTACAO != ORGSUP_EXERCICIO ) %>% 
+    select(DESCRICAO_CARGO) %>% 
+    count(DESCRICAO_CARGO) %>%
+    arrange(desc(n)) %>%
+    head( n = 5) 
+
+print(salarios_ex02)
+
+ar_cargos <- salarios_ex02 %>% pull(DESCRICAO_CARGO)
+
 ## 
 ### # ####
 
@@ -43,9 +58,22 @@ salarios %>% count(UF_EXERCICIO) %>% pull(UF_EXERCICIO) -> ufs # EXEMPLO
 ## Analise os valores por lotação dentro de um mesmo cargo e comente ao final do exercício se você considera alguma diferença significativa.
 ## 
 ## Dica 1: o operador %in% testa se valores de uma variável pertencem ao conjunto de valores de um vetor. Lembre que deve ser utilizada a variável cargos_diferente_lotacao
-salarios %>% filter(DESCRICAO_CARGO %in% c("MINISTRO DE PRIMEIRA CLASSE", "ANALISTA DE TEC DA INFORMACAO", "PESQUISADOR")) %>% count(DESCRICAO_CARGO) # EXEMPLO
+#salarios %>% filter(DESCRICAO_CARGO %in% c("MINISTRO DE PRIMEIRA CLASSE", "ANALISTA DE TEC DA INFORMACAO", "PESQUISADOR")) %>% count(DESCRICAO_CARGO) # EXEMPLO
 ## Dica 2: Será necessário agrupar (group_by) por mais de uma variável para calcular as estatísticas solicitadas. 
 ## A função group_by permite múltiplos nomes de variáveis na mesma chamada.
 ## 
 ### # ####
+
+salarios_ex03 <- salarios %>% filter(DESCRICAO_CARGO %in% c(ar_cargos)) %>% 
+                 mutate(MESMO_ORGAO = if_else( ORGSUP_LOTACAO == ORGSUP_EXERCICIO, "SIM", "NÃO")) %>%
+                 select(DESCRICAO_CARGO,MESMO_ORGAO,TOTAL_SALARIO) %>%
+                 group_by(DESCRICAO_CARGO,MESMO_ORGAO) %>%
+                 summarize(MEDIA = mean(TOTAL_SALARIO),
+                           DESVIO_PADRAO = sd(TOTAL_SALARIO),
+                           MEDIANA = median(TOTAL_SALARIO),
+                           DESVIO_ABS_MEDIANA = median( abs( TOTAL_SALARIO - median( TOTAL_SALARIO ))),
+                           MINIMO = min(TOTAL_SALARIO),
+                           MAXIMO = max(TOTAL_SALARIO))
+
+print(salarios_ex03)
 
